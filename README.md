@@ -1,0 +1,1 @@
+A "daemon" that runs in your tray. It polls an inbox over SMTP and sends the email it finds (completely unaltered) to a specified destination. In other words the emails appear in every way that they are from the original source.
