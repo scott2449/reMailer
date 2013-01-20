@@ -1,0 +1,114 @@
+<!-- need to add images to path? can't load tray atm -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>net.ubergeeks</groupId>
+	<artifactId>remailer</artifactId>
+	<packaging>jar</packaging>
+	<version>1.0.0</version>
+	<name>remailer</name>
+	<url>http://maven.apache.org</url>
+	<description>This is meant to run in your tray (any OS) and pull mail from one account and send it to another. It is meant to be used inside a protected network to let you "free" your email. Plus it's just a cool sample of how to use java mail apis.
+  </description>
+  <licenses>
+    <license>
+      <name>MIT</name>
+      <url>http://en.wikipedia.org/wiki/MIT_License</url>
+      <distribution>repo</distribution>
+      <comments></comments>
+    </license>
+  </licenses>
+  <scm>
+    <connection>scm:git:git@github.com:vngx/vngx-jsch.git</connection>
+    <url>scm:git:git@github.com:vngx/vngx-jsch.git</url>
+    <developerConnection>scm:git:git@github.com:vngx/vngx-jsch.git</developerConnection>
+  </scm>
+  <developers>
+    <developer>
+      <id>scott</id>
+      <name>Scott Rahner</name>
+    </developer>
+  </developers>
+	<build>
+		<plugins>
+			<!-- Ensures 1.6 compilation -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.0.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<showDeprecation>true</showDeprecation>
+				</configuration>
+			</plugin>
+			<!-- Copies dependent jars to the target dir, especially important w/ 
+				OSGi as you will need compliant bundles for imported dependencies which are 
+				not as easy to come by -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.2</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}</outputDirectory>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>false</overWriteSnapshots>
+							<overWriteIfNewer>true</overWriteIfNewer>
+							<excludeScope>test</excludeScope>
+							<excludeScope>provided</excludeScope>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- use our manifest file -->
+			<plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-jar-plugin</artifactId>
+		        <configuration>
+		          <archive>
+		            <manifest>
+		              <addClasspath>true</addClasspath>
+		              <mainClass>net.ubergeeks.main.Daemon</mainClass>
+		            </manifest>
+		            <manifestEntries>
+						<SplashScreen-Image>net/ubergeeks/images/dinosaur.gif</SplashScreen-Image>
+						<Class-Path>vnglib-1.0.jar</Class-Path>
+					</manifestEntries>
+		          </archive>
+		        </configuration>
+		    </plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.vng.gui</groupId>
+			<artifactId>vnglib</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/vnglib.jar</systemPath>
+		</dependency>
+
+
+	</dependencies>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<bundle.namespace>net.ubergeeks.remailer</bundle.namespace>
+	</properties>
+</project>
